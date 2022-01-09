@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
+using Score4.AI;
+using Score4.Core;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -83,7 +86,6 @@ internal class Program
         var options = WindowOptions.Default;
         options.Size = new Vector2D<int>(800, 600);
         options.Title = "LearnOpenGL with Silk.NET";
-        options.FramesPerSecond = 120;
         window = Window.Create(options);
 
         window.Load += OnLoad;
@@ -144,11 +146,20 @@ internal class Program
         if (primaryKeyboard.IsKeyPressed(Key.D))
             //Move right
             Camera.Position += Vector3.Normalize(Vector3.Cross(Camera.Front, Camera.Up)) * moveSpeed;
+        
+        if (primaryKeyboard.IsKeyPressed(Key.Space))
+            //Move Up
+            Camera.Position += new Vector3(0, moveSpeed, 0);
+        
+        if (primaryKeyboard.IsKeyPressed(Key.ShiftLeft))
+            //Move Down
+            Camera.Position -= new Vector3(0, moveSpeed, 0);
     }
 
     private static void OnRender(double deltaTime)
     {
         Gl.Enable(EnableCap.DepthTest);
+        Gl.ClearColor(Color.Aqua);
         Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
 
         VaoCube.Bind();

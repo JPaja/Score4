@@ -16,6 +16,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Score4.AI\Score4.AI.csproj" />
         <ProjectReference Include="..\Score4.Core\Score4.Core.csproj" />
     </ItemGroup>
 

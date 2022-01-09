@@ -28,8 +28,14 @@ public readonly record struct Table(ulong Board = 0UL, ulong Player = 0UL)
         };
     }
     public bool CanPlay(int x, int y) 
-        => Play(x,y, false) != this;
+        => TryPlay(x,y,false, out _);
 
+    public bool TryPlay(int x, int y, bool player, out Table table)
+    {
+        table = Play(x, y, player);
+        return table != this;
+    }
+    
     public bool IsValid()
     {
         for (int position = 0; position < 16; position++)
@@ -62,6 +68,24 @@ public readonly record struct Table(ulong Board = 0UL, ulong Player = 0UL)
         return points;
     }
 
+    public (bool Populated, bool Player)[,,] GetMatrix()
+    {
+        var result = new (bool, bool)[4, 4, 4];
+        for (int x = 0; x < 4; x++)
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                var position = GetPosition(x, y);
+                var boardData = GetPositionBoardData(position);
+                var playerData = GetPositionPlayerData(position);
+                for (int z = 0; z < 4; z++)
+                    result[x, y, z] = (GetDataBit(z, boardData), GetDataBit(z, playerData));
+            }
+        }
+
+        return result;
+    }
+    
     
     internal Table SetBoard(int x, int y, int z)
     {
@@ -100,6 +124,13 @@ public readonly record struct Table(ulong Board = 0UL, ulong Player = 0UL)
         property &= ~(0b1111UL << shift);
         property |= (ulong)data << shift;
         return property;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool GetDataBit(int position, byte data)
+    {
+        var mask = 1 << position;
+        return (data & mask) == mask;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
