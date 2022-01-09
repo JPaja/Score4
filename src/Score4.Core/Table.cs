@@ -14,12 +14,11 @@ public readonly record struct Table(ulong Board = 0UL, ulong Player = 0UL)
         var boardData = GetPositionBoardData(position);
         var playerData = GetPositionPlayerData(position);
         var dataCount = GetDataCount(boardData);
-        var playerCount = GetDataCount(playerData);
-        if (dataCount is -1 or >= 4 || dataCount != playerCount)
+        if (dataCount is -1 or >= 4)
             return this;
         
-        boardData = SetDataBit(boardData, dataCount + 1, true);
-        playerData = SetDataBit(playerData, dataCount + 1, player);
+        boardData = SetDataBit(boardData, dataCount, true);
+        playerData = SetDataBit(playerData, dataCount, player);
         
         return this with
         {
@@ -43,8 +42,7 @@ public readonly record struct Table(ulong Board = 0UL, ulong Player = 0UL)
             var boardData = GetPositionBoardData(position);
             var playerData = GetPositionPlayerData(position);
             var dataCount = GetDataCount(boardData);
-            var playerCount = GetDataCount(playerData);
-            if (dataCount is -1 or >= 4 || dataCount != playerCount)
+            if (dataCount is -1 or >= 4)
                 return false;
         }
 

@@ -23,9 +23,13 @@ internal class Program
     private static Shader LightingShader;
     private static Shader LampShader;
     private static readonly Vector3 LampPosition = new(1.2f, 1.0f, 2.0f);
-
+    private static Vector3 BoxPosition = new(0,0,0);
+    private static float boxRotation = 25f;
+    
     private static Camera Camera;
 
+    private static Table _table = new Table();
+    
     //Used to track change in mouse movement to allow for moving of the Camera
     private static Vector2 LastMousePosition;
 
@@ -98,6 +102,11 @@ internal class Program
 
     private static void OnLoad()
     {
+        _table = _table.Play(0, 0, true);
+        _table = _table.Play(0, 0, false);
+        _table = _table.Play(0, 1, true);
+        _table = _table.Play(0, 0, false);
+        
         var input = window.CreateInput();
         primaryKeyboard = input.Keyboards.FirstOrDefault();
         if (primaryKeyboard != null) primaryKeyboard.KeyDown += KeyDown;
@@ -154,6 +163,15 @@ internal class Program
         if (primaryKeyboard.IsKeyPressed(Key.ShiftLeft))
             //Move Down
             Camera.Position -= new Vector3(0, moveSpeed, 0);
+        
+        
+        if (primaryKeyboard.IsKeyPressed(Key.Up))
+            //Move Up
+            BoxPosition += new Vector3(0, moveSpeed, 0);
+
+        if (primaryKeyboard.IsKeyPressed(Key.Down))
+            //Move Down
+            BoxPosition -= new Vector3(0, moveSpeed, 0);
     }
 
     private static void OnRender(double deltaTime)
@@ -165,17 +183,38 @@ internal class Program
         VaoCube.Bind();
         LightingShader.Use();
 
-        //Slightly rotate the cube to give it an angled face to look at
-        LightingShader.SetUniform("uModel", Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(25f)));
-        LightingShader.SetUniform("uView", Camera.GetViewMatrix());
-        LightingShader.SetUniform("uProjection", Camera.GetProjectionMatrix());
-        LightingShader.SetUniform("objectColor", new Vector3(1.0f, 0.5f, 0.31f));
-        LightingShader.SetUniform("lightColor", Vector3.One);
-        LightingShader.SetUniform("lightPos", LampPosition);
-        LightingShader.SetUniform("viewPos", Camera.Position);
 
-        //We're drawing with just vertices and no indicies, and it takes 36 verticies to have a six-sided textured cube
-        Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+        var tableMatrix = _table.GetMatrix();
+        for (int x = 0; x < 4; x++)
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                for (int z = 0; z < 4; z++)
+                {
+                    var (populated, player) = tableMatrix[x, y, z];
+                    if(!populated)
+                        continue;
+                    var color = Vector3.One;//* (player? 1f:0.5f);
+                    var weight = 0.5f;
+                    var boxMatrix = Matrix4x4.Identity;
+                    boxMatrix *= Matrix4x4.CreateScale(weight * 0.5f);
+                    var pos = new Vector3((x - 2) * weight, (z - 2) * weight, (y - 2) * weight);
+                    boxMatrix *= Matrix4x4.CreateTranslation(pos);
+                    //Slightly rotate the cube to give it an angled face to look at
+                    LightingShader.SetUniform("uModel", boxMatrix);
+                    LightingShader.SetUniform("uView", Camera.GetViewMatrix());
+                    LightingShader.SetUniform("uProjection", Camera.GetProjectionMatrix());
+                    LightingShader.SetUniform("objectColor", color);
+                    LightingShader.SetUniform("lightColor", Vector3.One);
+                    LightingShader.SetUniform("lightPos", LampPosition);
+                    LightingShader.SetUniform("viewPos", Camera.Position);
+
+                    //We're drawing with just vertices and no indicies, and it takes 36 verticies to have a six-sided textured cube
+                    Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+                }
+            }
+        }
+        
 
         LampShader.Use();
 
