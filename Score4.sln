@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Score4.Core", "src\Score4.Core\Score4.Core.csproj", "{ECA07793-5E2E-4612-9E6E-E99FDD57CE3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Score4.AI", "src\Score4.AI\Score4.AI.csproj", "{765D22FE-29BE-4686-9547-6DF2A5179D0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Score4.UI", "src\Score4.UI\Score4.UI.csproj", "{7509B4F5-35EC-4E0E-B923-3CEDE7889796}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECA07793-5E2E-4612-9E6E-E99FDD57CE3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECA07793-5E2E-4612-9E6E-E99FDD57CE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECA07793-5E2E-4612-9E6E-E99FDD57CE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECA07793-5E2E-4612-9E6E-E99FDD57CE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{765D22FE-29BE-4686-9547-6DF2A5179D0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{765D22FE-29BE-4686-9547-6DF2A5179D0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{765D22FE-29BE-4686-9547-6DF2A5179D0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{765D22FE-29BE-4686-9547-6DF2A5179D0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7509B4F5-35EC-4E0E-B923-3CEDE7889796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7509B4F5-35EC-4E0E-B923-3CEDE7889796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7509B4F5-35EC-4E0E-B923-3CEDE7889796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7509B4F5-35EC-4E0E-B923-3CEDE7889796}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
