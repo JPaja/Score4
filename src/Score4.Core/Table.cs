@@ -20,53 +20,85 @@ public readonly record struct Table(ulong Board = 0UL, ulong Player = 0UL)
         
         boardData = SetDataBit(boardData, dataCount + 1, true);
         playerData = SetDataBit(playerData, dataCount + 1, player);
-        var newBoard = SetPropertyData(Board, position, boardData);
-        var newPlayer = SetPropertyData(Player, position, playerData);
         
         return this with
         {
-            Board = newBoard, 
-            Player = newPlayer
+            Board = SetPropertyData(Board, position, boardData), 
+            Player = SetPropertyData(Player, position, playerData)
         };
     }
-
-    internal ulong SetBoard(int x, int y, int z)
-    {
-        if (x >= 4 || y >= 4 || z >= 4)
-            return Board;
-        var position = GetPosition(x, y);
-        var boardData = GetPositionBoardData(position);
-        boardData = SetDataBit(boardData, z, true);
-        return SetPropertyData(Board, position, boardData);
-    }
-
     public bool CanPlay(int x, int y) 
         => Play(x,y, false) != this;
 
-
-    public (uint Player1, uint Player2) CountPoints()
+    public bool IsValid()
     {
-        return (0, 0);
+        for (int position = 0; position < 16; position++)
+        {
+            var boardData = GetPositionBoardData(position);
+            var playerData = GetPositionPlayerData(position);
+            var dataCount = GetDataCount(boardData);
+            var playerCount = GetDataCount(playerData);
+            if (dataCount is -1 or >= 4 || dataCount != playerCount)
+                return false;
+        }
+
+        return true;
     }
     
+    public (uint Player1, uint Player2) CountPoints()
+    {
+        var points = (Player1: 0U, Player2: 0U);
+        foreach (var winningMask in TableUtils.WinningBoardMasks)
+        {
+            if ((Board & winningMask) != winningMask)
+                continue;
+            var playerMask = (Player & winningMask);
+            if (playerMask == 0)
+                points.Player1++;
+            else if (playerMask == winningMask)
+                points.Player2++;
+        }
 
-    private static int GetPosition(int x, int y)
-        => ((y & 0b11) << 2) & (x & 0b11);
+        return points;
+    }
+
     
+    internal Table SetBoard(int x, int y, int z)
+    {
+        if (x >= 4 || y >= 4 || z >= 4)
+            return this;
+        var position = GetPosition(x, y);
+        var boardData = GetPositionBoardData(position);
+        boardData = SetDataBit(boardData, z, true);
+        return this with
+        {
+            Board = SetPropertyData(Board, position, boardData)
+        };
+    }
+
+    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private byte GetPositionBoardData(int position) 
-        => (byte) ((Board >> (position << 2)) & 0b1111);
+        => GetPropertyData(Board, position);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private byte GetPositionPlayerData(int position)
-        => (byte) ((Player >> (position << 2)) & 0b1111);
+        => GetPropertyData(Player, position);
+
+    private static int GetPosition(int x, int y)
+        => ((y & 0b11) << 2) | (x & 0b11);
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static byte GetPropertyData(ulong property, int position)
+        => (byte) ((property >> (position << 2)) & 0b1111);
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static ulong SetPropertyData(ulong property, int position, byte data)
     {
         var shift = position << 2;
         property &= ~(0b1111UL << shift);
-        property |= (data & 0b1111UL) << shift;
+        property |= (ulong)data << shift;
         return property;
     }
     
