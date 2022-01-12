@@ -21,24 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Silk.NET.Input.Common" Version="2.12.0" />
-        <PackageReference Include="Silk.NET.Input.Glfw" Version="2.12.0" />
-        <PackageReference Include="Silk.NET.OpenGL" Version="2.12.0" />
-        <PackageReference Include="Silk.NET.Windowing.Common" Version="2.12.0" />
-        <PackageReference Include="Silk.NET.Windowing.Glfw" Version="2.12.0" />
+      <None Remove="Resources\Lib\libglfw.so.3.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\Lib\libglfw.so.3.3" />
-      <None Update="lighting.frag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="shader.frag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="shader.vert">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
     </ItemGroup>
 
 </Project>

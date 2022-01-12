@@ -2,7 +2,7 @@ namespace Score4.Core;
 
 internal static class TableUtils
 {
-     static TableUtils()
+    static TableUtils()
     {
         WinningBoardMasks = GenerateVerticalWinningMasks()
             .Concat(GenerateHorizontalWinningMasks())
