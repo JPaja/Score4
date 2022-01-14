@@ -4,7 +4,7 @@ namespace Score4.AI;
 
 public static class Score4AI
 {
-    public static int Depth = 7;
+    public static int Depth = 5;
     public static Table Predict(Table table, bool player)
     {
         var (_, predictedTable) = Predict(table, Depth, player);
