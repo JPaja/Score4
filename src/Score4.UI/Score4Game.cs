@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame;
 using Score4.AI;
 using Score4.Core;
-using Score4.UI.Primitives;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace Score4.UI;
@@ -13,7 +12,6 @@ namespace Score4.UI;
 public class Score4Game : Game
 {
     private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
     private BasicEffect _basicEffect_White;
     private BasicEffect _basicEffect_Black;
     private BasicEffect _basicEffect_Red;
@@ -48,7 +46,7 @@ public class Score4Game : Game
     protected override void LoadContent()
     {
         oldState = Keyboard.GetState();
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        new SpriteBatch(GraphicsDevice);
         _basicEffect_White = new BasicEffect(GraphicsDevice)
         {
             AmbientLightColor = Vector3.One,
